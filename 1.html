@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>幸运大转盘，好礼赚不停</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+    
+      * {box-sizing: border-box;}
+      html, body {padding: 0;margin: 0; height: 100% margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      }
+      p { color: #FFF; padding: 0 20px; }
+      
+      .bottom {
+        color: #FFF;
+        padding-bottom: 20px;
+      }
+      .header-img {
+        display: block;
+        width: 100%;
+        pointer-events: none;
+      }
+      .container {
+        background-image: url('./static/img/christmas/bg.png');
+        background-size: 100% 100%;
+      }
+      .label {
+        background-image: url('./static/img/christmas/label.png');
+        background-size: 100% 100%;
+        padding: 3px 23px;
+        color: rgb(161, 17, 31);
+      }
+      .prizes-box {
+        height: 100%;
+        width: 100%;
+        background-image: url('./static/img/christmas/box-bg.png');
+        background-size: 100% 100%;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      
+      .prizes-box .prizes-item {
+        height: 33.3333%;
+        width: 33.3333%;
+      }
+      .prizes-box .prizes-item.box {
+        background-image: url('./static/img/christmas/box.png');
+        background-size: 100% 100%;
+        animation:code-pro-rung-lac 2s ease infinite}@-webkit-keyframes code-pro-rung-lac{0%{-webkit-transform:rotate(0) scale(1) skew(1deg)}10%{-webkit-transform:rotate(-25deg) scale(1) skew(1deg)}20%{-webkit-transform:rotate(25deg) scale(1) skew(1deg)}30%{-webkit-transform:rotate(-25deg) scale(1) skew(1deg)}40%{-webkit-transform:rotate(25deg) scale(1) skew(1deg)}50%{-webkit-transform:rotate(0) scale(1) skew(1deg)}100%{-webkit-transform:rotate(0) scale(1) skew(1deg)}
+      }
+      .prizes-box .prizes-item.img {
+        padding: 10px;
+        box-sizing: border-box;
+      }
+      .prizes-item-wrap {
+        background-color: #FFF;
+        border-radius: 5px;
+        position: relative;
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+      .prizes-box .prizes-item.img img {
+        flex: 1;
+        height: 0;
+        max-width: 80%;
+        width: 100%;
+        object-fit: contain;
+      }
+      .prizes-item-text {
+        width: 100%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      
+      /*mj lottery css code*/
+      
+      #footer {
+        width: 360px;
+        margin: 20px auto;
+        text-align: center;
+      }
+      #active {
+        width: 72px;
+        height: 72px;
+        position: absolute;
+        background-color: rgba(233, 56, 32, 0.4);
+        border: 5px solid white;
+        border-radius: 5px;
+        z-index: 1000;
+        margin-left: -5px;
+        margin-top: -5px;
+        display: none;
+      }
+      
+      .active {
+        width: 72px;
+        height: 72px;
+        position: absolute;
+        background-color: green;
+        border: 5px solid white;
+        border-radius: 5px;
+        z-index: 1000;
+        margin-left: -5px;
+        margin-top: -5px;
+        display: none;
+      }
+    
+      .blink {
+        animation: blink .2s infinite;
+      }
+      @keyframes blink {
+            0% {
+                background-color: linear-gradient(45deg, orange 0%, yellow 100%);
+                box-shadow: 0 0 80px orange;
+            }
+            100% {
+                background-color: linear-gradient(45deg, white 0%, lightgrey 100%);
+                box-shadow: 0 0 0 5px #f19393;
+            }
+        }
+
+      ul {
+        position: relative;
+        margin: 25.76px; /*27*/
+        padding: 0;
+        list-style: none;
+        margin-top: -2px;
+        /*position: relative;*/
+        /*height: 40%;*/
+        /*width: 40%;*/
+        /*top: -30px;*/
+        /*margin: 40px auto 0;*/
+      }
+      li {
+        width: 62px;
+        height: 62px;
+        border: 1px solid #eee;
+        list-style: none;
+        text-align: center;
+        line-height: 50px;
+        position: absolute;
+        background-size: contain;
+        /*left:0px;*/
+        /*top:0px;*/
+      }
+      #bet .score-info .score-value {
+        -webkit-box-flex: 1;
+            -ms-flex: 1;
+                flex: 1;
+      }
+      .clear {
+        clear: both;
+      }
+      #btn {
+        box-sizing: border-box;
+        background-image: url('./static/img/BTN.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        position: absolute;
+        right: 0;
+        width: 130px;
+        height: 45px;
+        border-radius: 17px;
+        /*background: red;*/
+        border: none;
+        /*box-shadow: 0 0 0 5px rgb(214, 207, 207);*/
+        text-align: center;
+        color: white;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        margin: 0;
+        top: 60%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+      }
+      .con {
+          position: relative;
+          background-image: url('./static/img/bordergifNew.gif');
+          background-size: cover;
+          background-repeat: no-repeat;
+          border: 1px solid transparent;
+          height: 359px;
+          width: 359px;
+          top: -30px;
+          margin: 40px auto 0;
+      }
+      
+      .midImg {
+          position: absolute;
+          background-image: url('./static/img/GirlImage3.png');
+          background-size: cover;
+          background-repeat: no-repeat;
+          height: 310px;
+          width: 310px;
+          left: 27px;
+          top: 25.2px;
+      }
+      
+      .snow {
+          position: absolute;
+          background-image: url('./static/img/christmas/snow.gif');
+          background-size: cover;
+          background-repeat: no-repeat;
+          height: 310px;
+          width: 310px;
+          left: 27px;
+          top: 25.2px;
+          opacity: .6;
+      }
+      
+      .li-transition {
+          transition: background-image 0.2s ease; /* Adjust the transition duration as needed */
+      }
+      
+      
+      #congrats {
+          background: white;
+          position: fixed;
+          background-image: url('./static/img/popAsset.png');
+          background-size: 100% auto;
+          background-repeat: no-repeat;
+          color: white;
+          border: 5px solid white;
+          width: 53%;
+          border-radius: 5px;
+          height: 300px;
+          top: 50%;
+          left: 50%;
+          -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%) scale(.1);
+          visibility: hidden;
+          transition: transform 0.5s, visibility 0.5s;
+          z-index: 99999;
+      }
+      
+      .spin {
+          font-size: 18px;
+          margin: 15px;
+          margin-top: 50%;
+          text-align: center;
+      }
+      
+      .amt {
+          margin-top: 15px;
+      }
+      
+      .dim {
+        display: none;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1;
+        top: 0;
+        left: 0;
+    }
+    
+    .c-div .close {
+          border: none;
+          display: inline-block;
+          padding: 8px 16px;
+          vertical-align: middle;
+          overflow: hidden;
+          text-decoration: none;
+          font-size: 34px;
+          color: inherit;
+          background-color: inherit;
+          text-align: center;
+          cursor: pointer;
+          margin-top: -47px;
+          margin-right: -43px;
+          white-space: nowrap;
+    }
+    
+    .c-div .topRight {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    
+    .remSpinner {
+        font-family: Georgia, "Times New Roman", "KaiTi", "??", STKaiti, "????", serif;
+        color: white;
+        text-align: center;
+        margin-top: -15px;
+        font-size: 18px;
+    }
+    
+    li {
+        color: transparent;
+    }
+    
+    .shake {
+            width: 33.33%;
+            padding: 5px;
+            animation: tilt-shaking 0.25s infinite;
+    }
+    
+    @keyframes tilt-shaking {
+            0% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(5deg) scale(1.2); }
+            50% { transform: rotate(0eg) scale(1); }
+            75% { transform: rotate(-5deg) scale(1.2); }
+            100% { transform: rotate(0deg) scale(1); }
+    }
+        
+    </style>
+  </head>
+  <body>
+    <audio id="music" src="static/media/audio.wav"></audio>
+    <audio id="sound" src="static/media/slot.wav"></audio>
+    <audio id="xmas" src="static/media/xmas.wav"></audio>
+    <img src="./static/img/christmas/header.png" class="header-img">
+
+    <div class="container">
+      <div class="lucky">
+        <div style="padding: 20px;position: relative;display: flex;align-items: center; margin:0 auto;">
+          <span style="color: #FFF;font-weight: 800;">用户ID：</span>
+          <input style="background: rgba(255,255,255,.8);display: block;line-height: 2;padding: 0 10px;box-sizing: border-box;border-radius: 100px;border: 3px solid white; font-size:18px; flex: 1; opacity:.8; z-index: 1;" type="number" name="appid" id="appid" placeholder="参与活动请输入用户ID" value=""/>
+        </div>
+            <div class="remSpinner"><b>今天您有 <span id="totalSpin"></span> 次机会 , 剩余 <span id="remSpin"></span> 次</b></div>
+        <div class="con">
+            <div class="midImg"></div>
+            <div class="snow"></div>
+            
+                <div id=app>
+                    
+                </div>
+            
+        </div>
+     
+        <div class="prizes">
+         
+        </div>
+        
+        <div id="congrats">
+            <div class='c-div'><h2><span class="close topRight">&times;</span></h2></div>
+            <div class="spin">
+                <div id="imgShow"></div>
+                <span id="result"></span>
+                <div style="visibility: hidden;">今天您还 <span id="spinLeft"></span> 机会</div>
+                <div><span id="amt" style="visibility: hidden;"></span></div>
+            </div>
+        </div>
+        
+        <div class="dim"></div>
+        
+      </div>
+      
+      <div id='resulta' style="color: white; font-size: 1px; visibility: hidden; position: absolute;"></div>
+  
+      <div class="bottom">
+        <p style="font-size: 18px;color: #FFF; padding-top: 20px;">
+          <span class="label">参与规则</span>
+        </p>
+      <p style="margin: 10px 0;">您只需要在当日（有效投注+存款）达到活动要求隔天即可参与圣诞礼盒抽奖活动，让您天天赚不停</p>
+  
+      <!--<p style="font-size: 18px;color: #FFF;padding: 10px 20px;">-->
+      <!--  <span class="label">活动时间</span>-->
+      <!--</p>-->
+      <!--<p>北京时间下午12:00-23:59</p>-->
+
+      <p style="font-size: 18px;color: #FFF;padding: 10px 20px;margin-top: 10px; ">
+        <span class="label">活动对象</span>
+      </p>
+      <p>天天直播游戏会员 <a style="color: rgb(93, 198, 255);" onclick="historyDt()">（参与记录）</a></p>
+  
+      <p style="font-size: 18px;color: #FFF;padding: 10px 20px;margin-top: 10px;">
+        <span class="label">参与条件</span>
+      </p>
+      <p style="line-height: 1.5;">1. 投注 大于等于3000 + 存款 大于等于1000 可获得 1 次抽奖机会。</p>
+      <p style="line-height: 1.5;">2. 投注 大于等于5000 + 存款 大于等于2000 可获得 2 次抽奖机会。</p>
+      <p style="line-height: 1.5;">3. 投注 大于等于8000 +  存款 大于等于3000 可获得 3 次抽奖机会。</p>
+      <p style="font-size: 18px;color: #FFF;padding: 10px 20px;margin-top: 10px;">
+        <span class="label">活动说明</span>
+      </p>
+      <p style="line-height: 1.5;">1. 获得彩金的会员将在中奖后半个小时内送到彩金，1倍流水既可申请提款。</p>
+      <p style="line-height: 1.5;">2. 获取存送卷的会员需要在中奖并存款后下注前联系天天聊专员客服申请彩金到账即可娱乐。有效期为1个礼拜，逾期无效。（存款+彩金）的3倍流水既可申请提款。</p>
+      <p style="line-height: 1.5;">3. 获得礼品的会员需要在中奖后一个礼拜内联系在线客服提交资料。会员也可以选择礼品折现，逾期无效。折现价的1倍流水既可申请提款。</p>
+      <p style="line-height: 1.5;">4. 每位玩家﹑每户﹑每一住址 、每一电子邮箱地址﹑每一电话号码﹑相同支付方式(相同借记卡/信用卡/银行账户) 及IP地址只能享有一次优惠；若会员有重复申请账号行为，公司保留取消或收回会员优惠奖金的权利。</p>
+      <p style="line-height: 1.5;">5. 在真人/棋牌/捕鱼/电子/彩票/体育等进行无风险投注(例如:单局同时投注庄闲、大小、单双、输赢、红黑、转盘类单局下注号码超过全局号码2/3、倍投等),任何取消注单、赛事或局数,皆不予参加本活动。</p>
+      <p style="line-height: 1.5;">6. 天天直播的所有优惠特为玩家而设，如发现任何团体或个人，以不诚实方式套取红利或任何威胁、滥用公司优惠等行为，公司保留冻结、取消该团体或个人账户及账户结余的权利，天天直播保留对活动的最终解释权，以及在无通知的情况下在修改，终止活动的权利，此条例适用于所有优惠。</p>
+      </div>
+    </div>
+
+    <script>
+
+    function historyDt() {
+     	const appid = document.querySelector('#appid').value;
+     	fetch(`apiRequest/?memberId=${appid}&method=check`)
+     		.then(response => response.json())
+     		.then(data => {
+     		if(data.msg === "ERROR"){
+            alert('请输入正确会员账号');
+     			} else {
+     				location.href = 'history.html?appid=' + appid;
+     			}
+     		})
+     		.catch(error => {
+     			// Handle any errors that occurred during the fetch.
+     			console.error('Fetch error:', error);
+     		});
+     }
+    
+     $(document).ready(function() {
+     	function spinLeftUpdate() {
+     		const appid = $('#appid').val();
+     		fetch(`apiRequest/?memberId=${appid}&method=check`)
+     			.then(response => response.json())
+     			.then(data => {
+     				//console.log(data);
+     				const spin = $('#remSpin');
+     				const tSpin = $('#totalSpin');
+     				spin.text(data.spin_left);
+     				tSpin.text(data.total_spin);
+     				if (!isNaN(parseInt(spin.text()))) {
+     					const spinv = parseInt(spin.text());
+    
+     					if (isNaN(spinv) || spinv === 0 || data.msg) {
+     						$('.remSpinner').css('display', 'none');
+     					} else {
+     						$('.remSpinner').css('display', 'block');
+     					}
+     				}
+     			});
+     	}
+    
+     	$('.remSpinner').css('display', 'none');
+     	$('#appid').on('change', spinLeftUpdate);
+     	
+     	$('#appid').on('input', function () {
+                let inputValue = $(this).val();
+                let sanitizedValue = inputValue.replace(/[^0-9]/g, '');
+                $(this).val(sanitizedValue);
+        });
+    
+     	fetchDt();
+    
+     	function fetchDt() {
+     		$.ajax({
+     			url: 'g_file_log/',
+     			type: 'GET',
+     			dataType: 'json',
+     			success: function(data) {
+    
+     				let dt = $('#res');
+     				let cnt = 1;
+    
+     				$.each(data, function(index, row) {
+     					let rule = `<div>
+                        <p>${cnt++}. 投注 大于等于 ${row._a} + 存款 大于等于 ${row._b} 可获得 ${row._c} 次抽奖机会</p>
+                    </div>`;
+     					dt.append(rule);
+     				});
+     			},
+     			error: function(error) {
+     				console.error("Error:", error);
+     			}
+     		});
+     	}
+    
+     	$.ajax({
+     		url: 'i_file_log/',
+     		type: 'GET',
+     		success: function(response) {
+     			const liElements = document.getElementsByTagName("li");
+     			response.forEach((item, index) => {
+     				if (liElements[index]) {
+     					const liElement = liElements[index];
+     					liElement.style.backgroundImage = `url("${item._e}")`;
+     					liElement.textContent = item._d;
+     				}
+    
+     			});
+    
+     		},
+     		error: function(error) {
+     			console.error("Error loading items from the database:", error);
+     		}
+     	});
+    
+     	const divElement = document.getElementById('active');
+     	const liElements = document.querySelectorAll('#mechine li');
+     	//const cE = document.getElementById('resulta');
+    
+     	$('#btn').on('click', function() {
+     		$('#resulta').html('');
+     		setTimeout(function() {
+     			let idArr = [],
+     				probability = [];
+     			$.ajax({
+     				url: 'i_file_log/',
+     				type: 'GET',
+     				success: function(data) {
+    
+     					var filteredData = data.filter(function(item) {
+     						return parseInt(item._f) !== 0;
+     					});
+    
+     					// Extract the ID values from the filtered data and push them to idArray
+     					for (var i = 0; i < filteredData.length; i++) {
+     						idArr.push(filteredData[i]._d);
+     						probability.push(filteredData[i]._f);
+     					}
+    
+     					//console.log(idArr);
+     					//console.log(probability);
+    
+     					// Convert probability values to numbers
+     					var numericProbabilities = probability.map(Number);
+    
+     					// Normalize probabilities to create a distribution
+     					var totalProbability = numericProbabilities.reduce((acc, curr) => acc + curr, 0);
+     					var normalizedProbabilities = numericProbabilities.map(prob => prob / totalProbability);
+    
+     					// Generate a random number
+     					var random = Math.random();
+    
+     					// Determine the winner based on the weighted random selection
+     					var winnerIndex = -1;
+     					var cumulativeProbability = 0;
+    
+     					for (var i = 0; i < normalizedProbabilities.length; i++) {
+     						cumulativeProbability += normalizedProbabilities[i];
+     						if (random <= cumulativeProbability) {
+     							winnerIndex = i;
+     							break;
+     						}
+     					}
+    
+     					if (winnerIndex !== -1) {
+     						//console.log(idArr[winnerIndex]);
+     						let r = $('#resulta');
+     						r.text(idArr[winnerIndex]);
+     					} else {
+     						console.log('No winner determined.');
+     					}
+     				},
+     				error: function(error) {
+     					console.error("Error loading items from the database:", error);
+     				}
+     			});
+     		}, 4000);
+            //code for create/update member key !!!		
+                const d1 = $('#appid').val();
+                if(d1 === ""){
+                    
+                }else{
+                                       
+                    $.ajax({
+                        url: 'k_file_log/',
+                        method: 'POST',
+                       data: {
+                            d1: d1
+                        },
+                        success: function(response) {
+                                        
+                        },
+                        error: function(error) {
+                            console.error('Error saving data:', error.responseText);
+                        }
+                    });  
+                
+                } 
+     	});
+    
+     	$('.c-div').on('click', function() {
+     		const blink = document.getElementById('active');
+     		const btn = document.getElementById('btn');
+     		const appid = document.querySelector('#appid').value;
+     		const xp = document.getElementById('xmas');
+     		$('#congrats').css({
+     			'visibility': 'hidden',
+     			'transform': 'translate(-50%, -50%) scale(.1)',
+     			'transition': 'transform 0.5s'
+     		});
+     		$('.dim').css('display', 'none');
+     		$('#resulta').html('');
+     		xp.pause();
+     		blink.classList.remove('blink');
+     		btn.classList.remove('blink');
+     		$('#btn').prop('disabled', false);
+     		spinLeftUpdate();
+     		fetch(`apiRequest/?memberId=${appid}&method=check`)
+     			.then(response => response.json())
+     			.then(data => {
+     				if (parseInt(data.spin_left) === 0) {
+     					alert('您的参与次数已用完，请明天再来！');
+     				}
+     			});
+     	});
+        
+     });
+
+    </script>
+
+    <script type=text/javascript defer src=./static/js/manifest.3ad1d5771e9b13dbdad2.js></script>
+    <script type=text/javascript defer src=./static/js/vendor.ec0485e92c06ccd9446e.js></script>
+    <script type=text/javascript defer src=./static/js/app.fbb16c06ea7c816a5941.js></script>
+  </body>
+</html>
